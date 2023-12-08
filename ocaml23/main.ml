@@ -11,6 +11,7 @@ let run_day file_name = function
   | 2 -> sum_file file_name Daytwo.game_sum
   | 3 -> In_channel.with_file file_name ~f:Daythree.process_file
   | 4 -> In_channel.with_file file_name ~f:Dayfour.process_file
+  | 8 -> In_channel.with_file file_name ~f:Dayeight.process_file
   | _ -> raise (Failure "Not a valid day!")
 ;;
 
@@ -20,6 +21,6 @@ let () =
   then print_endline "Please provide a day to run!"
   else (
     match Int.of_string (Array.get args 1) with
-    | day -> printf "The answer is %d\n" (run_day "test" day)
+    | day -> printf "The answer is %d\n" (run_day "input" day)
     | exception Failure _ -> print_endline "Please provide a valid day!")
 ;;
