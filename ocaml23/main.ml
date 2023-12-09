@@ -11,6 +11,7 @@ let run_day file_name = function
   | 2 -> sum_file file_name Daytwo.game_sum
   | 3 -> In_channel.with_file file_name ~f:Daythree.process_file
   | 4 -> In_channel.with_file file_name ~f:Dayfour.process_file
+  | 7 -> In_channel.with_file file_name ~f:Dayseven.process_file
   | 8 -> In_channel.with_file file_name ~f:Dayeight.process_file2
   | 9 -> sum_file file_name Daynine.extrapolate_value
   | _ -> raise (Failure "Not a valid day!")

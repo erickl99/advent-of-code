@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"cmp"
+	"fmt"
 	"slices"
 	"strconv"
 )
@@ -232,6 +233,9 @@ func get_joker_winnings(scanner *bufio.Scanner) int {
 	slices.SortFunc(hands, compare_joker_hand)
 	for idx, hand := range hands {
 		winnings += (idx + 1) * hand.bid
+	}
+	for _, h := range hands {
+		fmt.Println(h)
 	}
 	return winnings
 }
