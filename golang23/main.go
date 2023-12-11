@@ -62,5 +62,5 @@ func main() {
 	}
 	input := get_input(day)
 	scanner := bufio.NewScanner(strings.NewReader(input))
-	fmt.Println(get_joker_winnings(scanner))
+	fmt.Println(pipe_steps(scanner))
 }
