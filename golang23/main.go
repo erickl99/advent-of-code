@@ -49,6 +49,11 @@ func get_input(day int) string {
 	return string(bytes)
 }
 
+func test_input() string {
+	bytes, _ := os.ReadFile("test")
+	return string(bytes)
+}
+
 func main() {
 	args := os.Args
 	if len(args) < 2 {
@@ -57,10 +62,20 @@ func main() {
 	}
 	day, err := strconv.Atoi(args[1])
 	if err != nil || day < 1 || day > 25 {
+		fmt.Println(day)
 		fmt.Println("Please provide a valid day!")
 		os.Exit(1)
 	}
-	input := get_input(day)
-	scanner := bufio.NewScanner(strings.NewReader(input))
-	fmt.Println("Answer is:", count_springs_long(scanner))
+	var scanner *bufio.Scanner
+	if len(args) == 3 {
+		scanner = bufio.NewScanner(strings.NewReader(test_input()))
+	} else {
+		input := get_input(day)
+		scanner = bufio.NewScanner(strings.NewReader(input))
+	}
+	fmt.Println("Answer is:", reflections(scanner))
+	// one, _ := strconv.ParseInt("100001001", 2, 0)
+	// two, _ := strconv.ParseInt("", 2, 0)
+	// fmt.Println(differ(int(one), int(two), 9))
+	// fmt.Println(differ(358, 102, 9))
 }
