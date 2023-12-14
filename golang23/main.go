@@ -73,9 +73,5 @@ func main() {
 		input := get_input(day)
 		scanner = bufio.NewScanner(strings.NewReader(input))
 	}
-	fmt.Println("Answer is:", reflections(scanner))
-	// one, _ := strconv.ParseInt("100001001", 2, 0)
-	// two, _ := strconv.ParseInt("", 2, 0)
-	// fmt.Println(differ(int(one), int(two), 9))
-	// fmt.Println(differ(358, 102, 9))
+	fmt.Println("Answer is:", rock_load(scanner))
 }
