@@ -64,7 +64,7 @@ func count_springs(scanner *bufio.Scanner) int {
 			num, _ := strconv.Atoi(rd)
 			damaged[idx] = num
 		}
-		count += find_springs(row, 0, damaged, make([]byte, len(row)))
+		count += efficient_springs(row, damaged, 0, 0, 0, make(map[[3]int]int))
 	}
 	return count
 }

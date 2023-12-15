@@ -73,5 +73,5 @@ func main() {
 		input := get_input(day)
 		scanner = bufio.NewScanner(strings.NewReader(input))
 	}
-	fmt.Println("Answer is:", rock_load(scanner))
+	fmt.Println("Answer is:", count_springs(scanner))
 }
