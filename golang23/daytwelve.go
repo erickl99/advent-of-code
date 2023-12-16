@@ -70,29 +70,32 @@ func count_springs(scanner *bufio.Scanner) int {
 }
 
 func efficient_springs(row string, damaged []int, r_idx int, d_idx int, d_length int, dp map[[3]int]int) int {
-	state := [3]int{r_idx, d_idx, d_length}
+	state := [3]int{len(row) - r_idx, len(damaged) - d_idx, d_length}
 	if res, ok := dp[state]; ok {
 		return res
 	}
 	if r_idx == len(row) {
 		if d_idx == len(damaged) && d_length == 0 {
+			dp[state] = 1
 			return 1
-		} else if d_idx == len(damaged) -1 && damaged[d_idx] == d_length {
+		} else if d_idx == len(damaged)-1 && damaged[d_idx] == d_length {
+			dp[state] = 1
 			return 1
 		} else {
+			dp[state] = 0
 			return 0
 		}
 	}
 	valid := 0
 	if row[r_idx] == '.' || row[r_idx] == '?' {
 		if d_length == 0 {
-			valid += efficient_springs(row, damaged, r_idx + 1, d_idx, 0, dp)
+			valid += efficient_springs(row, damaged, r_idx+1, d_idx, 0, dp)
 		} else if d_idx < len(damaged) && damaged[d_idx] == d_length {
-			valid += efficient_springs(row, damaged, r_idx + 1, d_idx + 1, 0, dp)
+			valid += efficient_springs(row, damaged, r_idx+1, d_idx+1, 0, dp)
 		}
 	}
 	if row[r_idx] == '#' || row[r_idx] == '?' {
-		valid += efficient_springs(row, damaged, r_idx + 1, d_idx, d_length + 1, dp)
+		valid += efficient_springs(row, damaged, r_idx+1, d_idx, d_length+1, dp)
 	}
 	dp[state] = valid
 	return valid
@@ -113,7 +116,7 @@ func count_springs_long(scanner *bufio.Scanner) int {
 			}
 		}
 		var sb strings.Builder
-		for i := 0; i < FOLD - 1; i++ {
+		for i := 0; i < FOLD-1; i++ {
 			sb.WriteString(row)
 			sb.WriteString("?")
 		}
