@@ -39,7 +39,7 @@ func perform_request(day int) []byte {
 }
 
 func get_input(day int) string {
-	path := fmt.Sprintf("input-%d", day)
+	path := fmt.Sprintf("input/input-%d", day)
 	bytes, err := os.ReadFile(path)
 	if err != nil {
 		log.Println("Performing request...")
@@ -73,5 +73,5 @@ func main() {
 		input := get_input(day)
 		scanner = bufio.NewScanner(strings.NewReader(input))
 	}
-	fmt.Println("Answer is:", light_tiles(scanner))
+	fmt.Println("Answer is:", giant_lagoon(scanner))
 }
