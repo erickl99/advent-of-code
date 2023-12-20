@@ -73,5 +73,5 @@ func main() {
 		input := get_input(day)
 		scanner = bufio.NewScanner(strings.NewReader(input))
 	}
-	fmt.Println("Answer is:", giant_lagoon(scanner))
+	fmt.Println("Answer is:", rating_parts(scanner))
 }
