@@ -6,6 +6,17 @@ let sum_file filename func =
     In_channel.fold_lines file ~init:0 ~f:(fun sum line -> sum + func line))
 ;;
 
+let minAddToMakeValid str =
+  let rec helper chars stack unbalanced =
+    match chars with
+    | '(' :: rest -> helper rest (stack + 1) unbalanced
+    | ')' :: rest when stack > 0 -> helper rest (stack - 1) unbalanced
+    | ')' :: rest -> helper rest stack (unbalanced + 1)
+    | _ -> stack + unbalanced
+  in
+  helper (String.to_list str) 0 0
+;;
+
 let run_day file_name = function
   | 1 -> sum_file file_name Dayone.calibrate_one
   | 2 -> sum_file file_name Daytwo.game_sum
@@ -17,6 +28,7 @@ let run_day file_name = function
   | 10 -> In_channel.with_file file_name ~f:Dayten.process_file
   | 12 -> sum_file file_name Daytwelve.spring_count
   | 18 -> In_channel.with_file file_name ~f:Dayeighteen.process_file
+  | 69 -> minAddToMakeValid "((("
   | _ -> raise (Failure "Not a valid day!")
 ;;
 
