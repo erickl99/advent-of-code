@@ -67,11 +67,11 @@ func main() {
 		os.Exit(1)
 	}
 	var scanner *bufio.Scanner
-	if len(args) == 3 {
+	if len(args) == 3 && args[2] == "test"{
 		scanner = bufio.NewScanner(strings.NewReader(test_input()))
 	} else {
 		input := get_input(day)
 		scanner = bufio.NewScanner(strings.NewReader(input))
 	}
-	fmt.Println("Answer is:", rating_parts(scanner))
+	fmt.Println("Answer is:", longest_hike(scanner))
 }
