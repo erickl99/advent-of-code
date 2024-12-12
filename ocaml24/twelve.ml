@@ -40,9 +40,44 @@ let rec part_one plant position visited perimeter grid =
       part_one plant next visited perimeter grid))
 ;;
 
-let diag_deltas = [ -1, 1; 1, 1; 1, -1; -1, -1 ]
+let corner_deltas =
+  [ { x = 0; y = -1 }, { x = 1; y = 0 }, { x = 1; y = -1 }
+  ; { x = 1; y = 0 }, { x = 0; y = 1 }, { x = 1; y = 1 }
+  ; { x = 0; y = 1 }, { x = -1; y = 0 }, { x = -1; y = 1 }
+  ; { x = -1; y = 0 }, { x = 0; y = -1 }, { x = -1; y = -1 }
+  ]
+;;
+
+let is_border plant position grid =
+  position.x < 0
+  || position.x >= Array.length grid.(0)
+  || position.y < 0
+  || position.y >= Array.length grid
+  || (not @@ Char.equal plant grid.(position.y).(position.x))
+;;
 
 let count_vertices plant position grid =
+  List.fold corner_deltas ~init:0 ~f:(fun acc delta ->
+    let delta_one, delta_two, diag = delta in
+    let neighbor_one =
+      { x = position.x + delta_one.x; y = position.y + delta_one.y }
+    in
+    let neighbor_two =
+      { x = position.x + delta_two.x; y = position.y + delta_two.y }
+    in
+    let diag_neighbor = { x = position.x + diag.x; y = position.y + diag.y } in
+    if is_border plant neighbor_one grid && is_border plant neighbor_two grid
+    then acc + 1
+    else if (not @@ is_border plant neighbor_one grid)
+            && (not @@ is_border plant neighbor_two grid)
+            && is_border plant diag_neighbor grid
+    then acc + 1
+    else acc)
+;;
+
+let diag_deltas = [ -1, 1; 1, 1; 1, -1; -1, -1 ]
+
+let count_vertices_bad plant position grid =
   let borders =
     List.fold deltas ~init:[] ~f:(fun acc delta ->
       let delta_y, delta_x = delta in
