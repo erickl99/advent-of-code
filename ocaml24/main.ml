@@ -29,6 +29,7 @@ let () =
     | 10 -> Ten.run file_name part
     | 11 -> Eleven.run file_name part
     | 12 -> Twelve.run file_name part
+    | 13 -> Thirteen.run file_name part
     | _ ->
       eprintf "Invalid day given\n";
       Stdlib.exit 1
