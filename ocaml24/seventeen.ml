@@ -33,16 +33,6 @@ let get_operand computer program =
   | _ -> failwith "Invalid operand"
 ;;
 
-let print_state computer =
-  printf
-    "(isp:%d ra:%d rb:%d rc:%d)\n"
-    computer.isp
-    computer.ra
-    computer.rb
-    computer.rc;
-  Stdlib.flush Out_channel.stdout
-;;
-
 let rec execute_program output computer program =
   if computer.isp >= Array.length program
   then output
@@ -89,59 +79,51 @@ let rec execute_program output computer program =
 
 let to_binary n =
   let rec aux n acc =
-    if n = 0 then acc else aux (n / 2) (Char.(of_int_exn ((n % 2) + 48)) :: acc)
+    if n = 0 then acc else aux (n / 2) (Char.of_int_exn ((n % 2) + 48) :: acc)
   in
-  if n = 0
-  then String.pad_left ~char:'0' "0" ~len:64
-  else (
-    let result = String.of_char_list (aux n []) in
-    String.pad_left result ~char:'0' ~len:64)
+  if n = 0 then "0" else String.of_char_list (aux n [])
 ;;
 
-let rec execute_all starting ending program =
-  if starting <= ending
-  then (
-    let output =
-      execute_program [] { isp = 0; ra = starting; rb = 0; rc = 0 } program
-      |> List.rev
-    in
-    printf "For register A=%s:" (to_binary starting);
-    List.iter output ~f:(printf " %d");
-    printf "\n";
-    execute_all (starting + 1) ending program)
+let rec recover_register value depth program remaining =
+  let rec check_values iter target rest =
+    if iter = 8
+    then None
+    else (
+      let start = (8 * value) + iter in
+      let output =
+        execute_program [] { isp = 0; ra = start; rb = 0; rc = 0 } program
+      in
+      if List.nth_exn output depth = target
+      then (
+        match recover_register start (depth + 1) program rest with
+        | Some result -> Some result
+        | None -> check_values (iter + 1) target rest)
+      else check_values (iter + 1) target rest)
+  in
+  match remaining with
+  | [] -> Some value
+  | target :: rest -> check_values 0 target rest
 ;;
 
-
-let rec execute_bit_shift starting idx ending program =
-  if idx <= ending
-  then (
-    let init = Int.shift_left idx 38 in
-    let output =
-      execute_program
-        []
-        { isp = 0; ra = starting + init; rb = 0; rc = 0 }
-        program
-      |> List.rev
-    in
-    printf "For register A=%s:" (to_binary (starting + init));
-    List.iter output ~f:(printf " %d");
-    printf "\n";
-    execute_bit_shift starting (idx + 1) ending program)
+let part_two program =
+  let reversed = List.rev program in
+  let program = List.to_array program in
+  Option.value_exn @@ recover_register 0 0 program reversed
 ;;
 
-let lowest_geuss = 168601598991
-let added = Int.pow 2 14
-
-let part_one input =
-  let start = lowest_geuss in
-  match parse_string ~consume:All computer input with
-  | Ok (_, _, _, program) ->
-    execute_bit_shift start 0 (added) (List.to_array program);
-    69
-  | Error msg -> failwith msg
+let part_one ra rb rc program =
+  let output = execute_program [] { isp = 0; ra; rb; rc } program |> List.rev in
+  List.iter output ~f:(printf "%d,");
+  printf "\n";
+  List.length output
 ;;
 
-let run file _ =
+let run file part =
   let input = In_channel.read_lines file |> String.concat in
-  part_one input
+  match parse_string ~consume:All computer input with
+  | Ok (ra, rb, rc, program) ->
+    if part = 1
+    then part_one ra rb rc (List.to_array program)
+    else part_two program
+  | Error msg -> failwith msg
 ;;
