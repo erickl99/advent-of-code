@@ -40,6 +40,8 @@ let () =
     | 21 -> Twentyone.run file_name part
     | 22 -> Twentytwo.run file_name part
     | 23 -> Twentythree.run file_name part
+    | 24 -> Twentyfour.run file_name part
+    | 25 -> Twentyfive.run file_name part
     | _ ->
       eprintf "Invalid day given\n";
       Stdlib.exit 1
