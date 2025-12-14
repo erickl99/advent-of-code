@@ -14,6 +14,7 @@ let () =
     match day with
     | 1 -> Dayone.run file_name
     | 2 -> Daytwo.run file_name
+    | 3 -> Daythree.run file_name
     | _ ->
       eprintf "Choose a valid day!";
       Stdlib.exit 1
